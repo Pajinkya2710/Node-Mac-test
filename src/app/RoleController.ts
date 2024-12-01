@@ -196,7 +196,7 @@ export default class RoleController {
       }
   
       const roleUser = new UserRoles({
-        business_id: id,
+        role_id: id,
         user_id: user_id,
       });
       await roleUser.save();

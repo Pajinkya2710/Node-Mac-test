@@ -1,0 +1,295 @@
+
+# API Documentation for User Management
+
+This document outlines the API calls for managing users and roles, including the required request bodies and instructions for performing the necessary actions.
+
+## Instructions
+
+Before using the API, run the following command to seed the database with initial data:
+
+```bash
+npm run seed
+```
+
+---
+
+### 1. **Admin Login**
+
+**Endpoint**: `POST /admins/login`
+
+**Description**: Authenticates the admin user and returns a JWT token for further API requests.
+
+#### Request Body:
+
+```json
+{
+  "username": "super_admin",
+  "password": "123456"
+}
+```
+
+#### Response:
+
+- **Status**: 200 OK
+- **Body**:
+  ```json
+  {
+    "token": "<JWT_TOKEN>"
+  }
+  ```
+
+**Note**: Use the `token` received in the response to authenticate subsequent requests.
+
+---
+
+### 2. **Create User**
+
+**Endpoint**: `POST /users`
+
+**Description**: Registers a new user with provided details.
+
+#### Request Body:
+
+```json
+{
+  "first_name": "Mack",
+  "last_name": "Hardy",
+  "email": "mack12@example.com",
+  "phone": "1234567890"
+}
+```
+
+#### Response:
+
+- **Status**: 201 Created
+- **Body**:
+  ```json
+  {
+    "message": "User created successfully",
+    "user": {
+      "_id": "<USER_ID>",
+      "first_name": "Mack",
+      "last_name": "Hardy",
+      "email": "mack12@example.com",
+      "phone": "1234567890"
+    }
+  }
+  ```
+
+---
+
+### 3. **Create Role**
+
+**Endpoint**: `POST /roles`
+
+**Description**: Creates a new role for users (e.g., Admin, User, etc.).
+
+#### Request Body:
+
+```json
+{
+  "title": "Manager"
+}
+```
+
+#### Response:
+
+- **Status**: 201 Created
+- **Body**:
+  ```json
+  {
+    "message": "Role created successfully",
+    "role": {
+      "_id": "<ROLE_ID>",
+      "title": "Manager"
+    }
+  }
+  ```
+
+---
+
+### 4. **Assign Role to User**
+
+**Endpoint**: `POST /roles/:role_id/users`
+
+**Description**: Assigns a role to a specific user by their user ID.
+
+#### Request Body:
+
+```json
+{
+  "user_id": "<USER_ID>"
+}
+```
+
+- Replace `<USER_ID>` with the actual user ID to which the role will be assigned.
+
+#### Response:
+
+- **Status**: 200 OK
+- **Body**:
+  ```json
+  {
+    "message": "Role assigned successfully to the user",
+    "user": {
+      "_id": "<USER_ID>",
+      "first_name": "Mack",
+      "last_name": "Hardy",
+      "role": "manager"
+      
+    }
+  }
+  ```
+
+---
+
+### 5. **Get All Users with Filters**
+
+**Endpoint**: `GET /users`
+
+**Description**: Lists all users with optional filters (e.g., first name, last name, email, phone, role).
+
+#### Query Parameters:
+- `first_name`: string (optional)
+- `last_name`: string (optional)
+- `email`: string (optional)
+- `phone`: string (optional)
+- `role`: string (optional)
+
+#### Example Request:
+
+```http
+GET /users?first_name=Mack&role=computer
+Authorization: Bearer <JWT_TOKEN>
+```
+
+#### Response:
+
+- **Status**: 200 OK
+- **Body**:
+  ```json
+  {
+    "users": [
+      {
+        "_id": "<USER_ID>",
+        "first_name": "Mack",
+        "last_name": "Hardy",
+        "email": "mack12@example.com",
+        "phone": "1234567890",
+        "role": "Manager"
+        
+      }
+    ]
+  }
+  ```
+
+---
+
+### 6. **Get User by ID**
+
+**Endpoint**: `GET /users/:id`
+
+**Description**: Retrieves a user by their ID.
+
+#### Example Request:
+
+```http
+GET /users/<USER_ID>
+Authorization: Bearer <JWT_TOKEN>
+```
+
+#### Response:
+
+- **Status**: 200 OK
+- **Body**:
+  ```json
+  {
+    "_id": "<USER_ID>",
+    "first_name": "Mack",
+    "last_name": "Hardy",
+    "email": "mack12@example.com",
+    "phone": "1234567890",
+    "role":  "Manager"
+    
+  }
+  ```
+
+---
+
+### 7. **Update User**
+
+**Endpoint**: `PUT /users/:id`
+
+**Description**: Updates an existing user's details by their ID.
+
+#### Request Body:
+
+```json
+{
+  "first_name": "Mack",
+  "last_name": "Hardy",
+  "email": "mack12@example.com",
+  "phone": "1234567890"
+}
+```
+
+#### Example Request:
+
+```http
+PUT /users/<USER_ID>
+Authorization: Bearer <JWT_TOKEN>
+```
+
+#### Response:
+
+- **Status**: 200 OK
+- **Body**:
+  ```json
+  {
+    "message": "User updated successfully",
+    "user": {
+      "_id": "<USER_ID>",
+      "first_name": "Mack",
+      "last_name": "Hardy",
+      "email": "mack12@example.com",
+      "phone": "1234567890"
+    }
+  }
+  ```
+
+---
+
+### 8. **Delete/Disable User**
+
+**Endpoint**: `DELETE /users/:id`
+
+**Description**: Deletes or disables a user by their ID.
+
+#### Example Request:
+
+```http
+DELETE /users/<USER_ID>
+Authorization: Bearer <JWT_TOKEN>
+```
+
+#### Response:
+
+- **Status**: 200 OK
+- **Body**:
+  ```json
+  {
+    "message": "User deleted successfully"
+  }
+  ```
+
+---
+
+### Authentication & Authorization
+
+- All the API endpoints, except for **`/admins/login`**, require the JWT token in the `Authorization` header:
+  
+  ```http
+  Authorization: Bearer <JWT_TOKEN>
+  ```
+
+- Use the **Admin Login** API (`POST /admins/login`) to authenticate and receive a JWT token for authorization.
