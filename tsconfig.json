@@ -1,0 +1,28 @@
+
+{ 
+    "compilerOptions":{ 
+       "target":"es6",
+       "moduleResolution":"node",
+       "module":"commonjs",
+       "declaration": false,
+       "emitDecoratorMetadata":true,
+       "experimentalDecorators":true,
+       "noImplicitUseStrict":false,
+       "outDir":"dist/",
+       "baseUrl":"src/app.ts",
+       "listFiles":false,
+       "noEmitHelpers":false,
+       "noImplicitReturns": true,
+       "strict": false,
+       "suppressImplicitAnyIndexErrors": false,
+       "strictPropertyInitialization": false,
+       "esModuleInterop": true
+    },
+    "include":[ 
+       "src/**/*","index.ts"
+    ],
+    "exclude":[ 
+       "node_modules"
+    ],
+    "compileOnSave":false
+ }
